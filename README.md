@@ -124,17 +124,7 @@ To improve inference speed, we utilize a specialized MTP Head consisting of a sl
 
 You can get started with Step 3.5 Flash in minutes using Cloud API via our supported providers.
 
-### 5.1 Get Your API Key
-Sign up at [OpenRouter](https://openrouter.ai) or [platform.stepfun.ai](https://platform.stepfun.ai), and grab your API key. 
-
-> OpenRouter now offers free trial for Step 3.5 Flash.
-
-| Provider | Website | Base URL |
-| :--- | :--- | :--- |
-| OpenRouter | https://openrouter.ai | https://openrouter.ai/api/v1 |
-| StepFun | https://platform.stepfun.ai | https://api.stepfun.ai/v1 |
-
-### 5.2 Setup
+### 5.1 Setup
 
 Install the standard OpenAI SDK (compatible with both platforms).
 
@@ -142,18 +132,49 @@ Install the standard OpenAI SDK (compatible with both platforms).
 pip install --upgrade "openai>=1.0"
 ```
 
-Note: OpenRouter supports multiple SDKs. Learn more [here](https://openrouter.ai/docs/quickstart).
+### 5.2 Option 1: StepFun Platform
 
-### 5.3 Implementation Example
-
-This example shows starting a chat with Step 3.5 Flash.
+1. **Get API Key**: Sign up at [platform.stepfun.ai](https://platform.stepfun.ai).
+2. **Run the code**:
 
 ```python
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="YOUR_API_KEY",
-    base_url="https://api.stepfun.ai/v1", # or "https://openrouter.ai/api/v1"
+    api_key="YOUR_STEPFUN_API_KEY",
+    base_url="https://api.stepfun.ai/v1",
+)
+
+completion = client.chat.completions.create(
+    model="step-3.5-flash",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are an AI chat assistant provided by StepFun. You are good at Chinese, English, and many other languages.",
+        },
+        {
+            "role": "user",
+            "content": "Introduce StepFun's artificial intelligence capabilities."
+        },
+    ],
+)
+
+print(completion.choices[0].message.content)
+```
+
+### 5.3 Option 2: OpenRouter
+
+> OpenRouter now offers free trial for Step 3.5 Flash. OpenRouter also supports [multiple SDKs](https://openrouter.ai/docs/quickstart).
+
+1. **Get API Key**: Sign up at [OpenRouter](https://openrouter.ai).
+2. **Run the code**:
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_OPENROUTER_API_KEY",
+    base_url="https://openrouter.ai/api/v1",
     # Optional: OpenRouter headers for app rankings
     default_headers={
         "HTTP-Referer": "<YOUR_SITE_URL>", 
@@ -162,7 +183,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="step-3.5-flash", # Use "stepfun/step-3.5-flash" for OpenRouter
+    model="stepfun/step-3.5-flash",
     messages=[
         {
             "role": "system",
@@ -367,190 +388,100 @@ cmake --build build-vulkan -j8
 ## 7. Using Step 3.5 Flash on Agent Platforms
 
 ### 7.1 Claude Code & Codex
-It's straightforward to add Step 3.5 Flash to the list of models in most coding environments. See below for the instructions for configuring Claude Code and Codex to use Step 3.5 Flash.
+It's straightforward to add Step 3.5 Flash to the list of models in most coding environments. See below for the instructions for configuring **Claude Code** and **Codex** to use Step 3.5 Flash.
 
 #### 7.1.1 Prerequisites
-Sign up at StepFun.ai or OpenRouter and grab an API key, as mentioned in the Quick Start.
+1.  **API Key**: Sign up at [StepFun.ai](https://stepfun.ai) or [OpenRouter](https://openrouter.ai) to get an API key.
+2.  **Node.js**: Ensure you have Node.js (v20+) installed. You can install it via [nvm](https://github.com/nvm-sh/nvm) or from [nodejs.org](https://nodejs.org/).
 
-#### 7.1.2 Environment setup
-Claude Code and Codex rely on Node.js. We recommend installing Node.js version > v20. You can install Node via nvm.
+#### 7.1.2 Use Step 3.5 Flash on Claude Code
 
-**Mac/Linux**:
-```bash
-# Install nvm on Mac/Linux via curl：
-# Step 1
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+1. **Install Claude Code**:
+   ```bash
+   npm install -g @anthropic-ai/claude-code
+   ```
 
-# Copy the full command
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+2. **Configure API**:
+   We support both **Anthropic-style** (native) and **OpenAI-style** (via router) APIs.
 
-# Users in China can set up npm mirror
-npm config set registry https://registry.npmmirror.com
+   **Option A: Anthropic API Style (Recommended)**  
+   Step 3.5 Flash provides an Anthropic-compatible endpoint. Edit `~/.claude/settings.json`:
+   
+   ```json
+   {
+     "env": {
+       "ANTHROPIC_API_KEY": "YOUR_STEPFUN_API_KEY",
+       "ANTHROPIC_BASE_URL": "https://api.stepfun.ai/"
+     },
+     "model": "step-3.5-flash"
+   }
+   ```
+   *Run `/status` in Claude Code to confirm.*
 
-# Step 2
-nvm install v22
-
-# Make sure Node.js is installed
-node --version
-
-npm --version
-```
-
-**Windows**:
-You can download the installation file (`nvm-setup.exe`) from [https://github.com/coreybutler/nvm-windows/releases](https://github.com/coreybutler/nvm-windows/releases). Follow the instructions to install nvm. Run nvm commands to make sure it is installed.
-
-#### 7.1.3 Use Step 3.5 Flash on Claude Code
-
-1. Install Claude Code.
-```bash
-# install claude code via npm
-npm install -g @anthropic-ai/claude-code
-
-# test if the installation is successful
-claude --version 
-```
-
-2. Configure Claude Code.
-
-  To accommodate diverse workflows in Claude Code, we support both **Anthropic-style** and **OpenAI-style** APIs. 
-
-  **Option A: Anthropic API style**:
-
-  > If you intend to use the **OpenRouter** API, refer to the OpenRouter integration guide.  
-
-  Step 1: Edit Claude Settings. Update `~/.claude/settings.json`.
-  > You only need to modify the fields shown below. Leave the rest of the file unchanged.
-
-  ```json
-  {
-  "env": {
-    "ANTHROPIC_API_KEY": "API_KEY_from_StepFun",
-    "ANTHROPIC_BASE_URL": "https://api.stepfun.ai/"
-  },
-  "model": "step-3.5-flash"
-  }
-  ```
-  Step 2: Start Claude Code.
-  Save the file, then start Claude Code. Run `/status` to confirm the model and base URL.
-
-  ```txt
-  ❯ /status
-  ─────────────────────────────────────────────────────────────────────────────────
-  Settings:  Status   Config   Usage  (←/→ or tab to cycle)
-
-  Version: 2.1.1
-  Session name: /rename to add a name
-  Session ID: 676dae61-259d-4eef-8c2f-0f1641600553
-  cwd: /Users/step-test/
-  Auth token: none
-  API key: ANTHROPIC_API_KEY
-  Anthropic base URL: https://api.stepfun.ai/
-
-  Model: step-3.5-flash
-  Setting sources: User settings
-  ```
-
-  **Option B: OpenAI API style**
-
-  > Note: OpenAI API style here refers to the `chat/completions/` format.
-
-  > We recommend using `claude-code-router`. For details, see [https://github.com/musistudio/claude-code-router](https://github.com/musistudio/claude-code-router).
-
-  After Claude Code is installed, install `claude-code-router` :
-
-  ```bash
-  # install ccr via npm
-  npm install -g @musistudio/claude-code-router
-
-  # validate it is installed
-  ccr -v
-  ```
-
-  Add the following configurations to `~/.claude-code-router/config.json`.
-
-  ```json
-  {
-  "PORT": 3456,
-  "Providers": [
-    {
-      "name": "stepfun-api",
-      "api_base_url": "https://api.stepfun.com/v1/chat/completions",
-      "api_key": "StepFun_API_KEY",
-      "models": ["step-3.5-flash"],
-      "transformer":{
-           "step-3.5-flash": { "use": ["OpenAI"]}
+   **Option B: OpenAI API Style**  
+   This method uses `claude-code-router` to bridge the OpenAI-compatible API (e.g., `chat/completions`) to Claude Code.
+   
+   1. Install the router:
+      ```bash
+      npm install -g @musistudio/claude-code-router
+      ```
+   2. Edit `~/.claude-code-router/config.json`:
+      ```json
+      {
+        "PORT": 3456,
+        "Providers": [
+          {
+            "name": "stepfun-api",
+            "api_base_url": "https://api.stepfun.com/v1/chat/completions",
+            "api_key": "YOUR_StepFun_API_KEY",
+            "models": ["step-3.5-flash"],
+            "transformer": {
+              "step-3.5-flash": { "use": ["OpenAI"] }
+            }
+          }
+        ],
+        "Router": {
+          "default": "stepfun-api,step-3.5-flash",
+          "background": "stepfun-api,step-3.5-flash",
+          "think": "stepfun-api,step-3.5-flash",
+          "longContext": "stepfun-api,step-3.5-flash",
+          "webSearch": "stepfun-api,step-3.5-flash"
+        }
       }
-    }
-  ],
-  "Router": {
-    "default": "stepfun-api,step-3.5-flash",
-    "background": "stepfun-api,step-3.5-flash",
-    "think": "stepfun-api,step-3.5-flash",
-    "longContext": "stepfun-api,step-3.5-flash",
-    "webSearch": "stepfun-api,step-3.5-flash"
-  }
-  }
-  ```
-  You can now start Claude Code:
+      ```
+   3. Start using:
+      ```bash
+      ccr code   # Starts Claude Code via the router
+      ```
 
-  ```bash
-  # Start Claude
-  ccr code 
+#### 7.1.3 Use Step 3.5 Flash on Codex
 
-  # restart ccr if configs are changed
-  ccr restart 
-  ```
+1. **Install Codex**:
+   ```bash
+   npm install -g @openai/codex
+   ```
 
-#### 7.1.4 Use Step 3.5 Flash on Codex
-1. Install Codex
-```bash
-# Install codex via npm
-npm install -g @openai/codex
+2. **Configure Codex**:
+   Update `~/.codex/config.toml` (keep other settings unchanged):
 
-# Test if it is installed
-codex --version
-```
+   ```toml
+   model="step-3.5-flash"
+   model_provider = "stepfun-chat"
+   preferred_auth_method = "apikey"
 
-2. Configure Codex
-Add the following settings to `~/.codex/config.toml`, keeping the rest of the settings as they are.
+   # configure the provider
+   [model_providers.stepfun-chat]
+   name = "OpenAI using response"
+   base_url = "https://api.stepfun.ai/v1"
+   env_key = "OPENAI_API_KEY"
+   wire_api = "chat"
+   query_params = {}
+   ```
+   *Note: `wire_api` must be set to `chat`.*
 
-```toml
-model="step-3.5-flash"
-model_provider = "stepfun-chat"
-preferred_auth_method = "apikey"
+   Run codex in a new Terminal window to start. Run `/status` to check the configuration.
 
-# configure the provider
-[model_providers.stepfun-chat]
-name = "OpenAI using response"
-base_url = "https://api.stepfun.ai/v1"
-env_key = "OPENAI_API_KEY"
-wire_api = "chat"
-query_params = {}
-```
-
-For Codex, `wire_api` only supports `chat` . If you use the `responses` mode, you'll need to change to `chat`. Please also switch `model_provider` to the newly configured `stepfun-chat`.
-
-When finishing the configuration, run codex in a new Terminal window to start Codex. Run `/status` to check the configuration.
-
-```bash
-/status
-📂 Workspace
-  • Path: /Users/step-test/
-  • Approval Mode: on-request
-  • Sandbox: workspace-write
-  • AGENTS files: (none)
-
-🧠 Model
-  • Name: step-3.5-flash
-  • Provider: Stepfun-chat
-
-💻 Client
-  • CLI Version: 0.40.0
-```
-
-#### 7.1.5 Use Step 3.5 Flash on Step-DeepResearch (DeepResearch)
+#### 7.1.4 Use Step 3.5 Flash on Step-DeepResearch (DeepResearch)
 1. Use the reference environment setup below and configure `MODEL_NAME` to `Step-3.5-Flash`. [https://github.com/stepfun-ai/StepDeepResearch?tab=readme-ov-file#1-environment-setup](https://github.com/stepfun-ai/StepDeepResearch?tab=readme-ov-file#1-environment-setup)
 
 

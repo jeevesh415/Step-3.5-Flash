@@ -372,203 +372,102 @@ print(output_text)
 
 ## 7. Agent框架接入
 
-### 7.1 Claude Code和Codex接入
-大部分情况下编程工具都可以很方便的接入Step 3.5 Flash模型使用，这里我们主要准备了Claude Code、Codex工具接入使用教程。
+### 7.1 Claude Code 和 Codex
+在大多数编程环境中添加 Step 3.5 Flash 模型都非常简单。以下是配置 **Claude Code** 和 **Codex** 使用 Step 3.5 Flash 的说明。
 
-#### 7.1.1 配置准备
-按前面准备工作注册阶跃星辰开放平台或者OpenRouter账号，获取API Key。
+#### 7.1.1 前置准备
+1.  **API Key**：注册 [StepFun](https://platform.stepfun.com) 或 [OpenRouter](https://openrouter.ai) 以获取 API Key。
+2.  **Node.js**：确保已安装 Node.js (v20+)。可以通过 [nvm](https://github.com/nvm-sh/nvm) 或 [nodejs.org](https://nodejs.org/) 安装。
 
-#### 7.1.2 环境准备
-Claude Code和Codex工具运行均依赖Node.js环境，因此首先需要安装Node.js环境，建议Node.js版本在v20以上，可通过nvm工具安装管理Node.js版本。
+#### 7.1.2 在 Claude Code 上使用 Step 3.5 Flash
 
-**Mac/Linux环境安装**：
-```bash
-# Mac/Linux环境可使用以下命令安装nvm（使用curl）：
-# 步骤1
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+1.  **安装 Claude Code**：
+    ```bash
+    npm install -g @anthropic-ai/claude-code
+    ```
 
-# 安装完复制log输出的最后几行执行
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+2.  **配置 API**：
+    我们支持 **Anthropic 风格** (原生) 和 **OpenAI 风格** (通过 `claude-code-router`) 两种 API。
 
-# 中国用户可以设置 npm 镜像源 
-npm config set registry https://registry.npmmirror.com
+    **选项 A：Anthropic API 风格 (推荐)**  
+    Step 3.5 Flash 提供了 Anthropic 兼容的接口。编辑 `~/.claude/settings.json`：
+    
+    ```json
+    {
+      "env": {
+        "ANTHROPIC_API_KEY": "阶跃星辰开放平台_API_KEY",
+        "ANTHROPIC_BASE_URL": "https://api.stepfun.com/"
+      },
+      "model": "step-3.5-flash"
+    }
+    ```
+    *运行 `/status` 命令确认配置。*
 
-# 步骤2
-nvm install v22
-
-# 检查 Node.js 是否安装成功
-node --version
-
-npm --version
-```
-
-**Windows环境安装**：
-可通过下载nvm安装程序进行安装。
-- 访问：[https://github.com/coreybutler/nvm-windows/releases](https://github.com/coreybutler/nvm-windows/releases)
-- 下载 `nvm-setup.exe`
-- 安装步骤：
-  - 以管理员身份运行安装程序nvm-setup.exe
-  - 接受许可协议
-  - 选择安装路径（默认即可）
-  - 设置 Node.js 符号链接路径（默认即可）
-  - 运行nvm命令验证环境是否安装成功
-
-#### 7.1.3 Step 3.5 Flash 接入 Claude code
-
-1. 安装 Claude Code。
-   ```bash
-   # 通过npm安装claude-code
-   npm install -g @anthropic-ai/claude-code
-   
-   # 验证是否安装成功
-   claude --version 
-   ```
-
-2. 配置Claude Code。
-
-   为适配不同场景的编程需求，针对Claude code的使用，我们提供了openai api协议和anthropic api协议两种使用方式。如果你想使用OpenRouter API，请参考OpenRouter集成指南。
-
-   **方式一：Anthropic API协议使用**
-
-   通过Anthropic API使用时只需配置下面信息至`~/.claude/settings.json`即可，文件原有配置信息不变。
-
-   ```bash
-   # 修改claude settings文件，
-   vi ~/.claude/settings.json
-   ```
-
-   ```json
-   {
-     "env": {
-       "ANTHROPIC_API_KEY": "从开放平台获取的apikey",
-       "ANTHROPIC_BASE_URL": "https://api.stepfun.com/",
-     },
-     "model": "step-3.5-flash"
-   }
-   ```
-   设置成功后可以执行Claude 启动并通过`/status`命令查看配置情况。
-
-   ```txt
-   ❯ /status
-   ─────────────────────────────────────────────────────────────────────────────────
-     Settings:  Status   Config   Usage  (←/→ or tab to cycle)
-   
-     Version: 2.1.1
-     Session name: /rename to add a name
-     Session ID: 676dae61-259d-4eef-8c2f-0f1641600553
-     cwd: /Users/step-test/
-     Auth token: none
-     API key: ANTHROPIC_API_KEY
-     Anthropic base URL: https://api.stepfun.com/
-   
-     Model: step-3.5-flash
-     Setting sources: User settings
-   ```
-
-   **方式二：Openai API协议使用**
-
-   > 这里Openai API协议指`chat/completions`。
-   > 通过Openai API使用时我们推荐使用ccr的方式，详细使用可以参考这里 [https://github.com/musistudio/claude-code-router](https://github.com/musistudio/claude-code-router)。
-   
-   参考下面命令安装claude-code-router，注意，请确保已安装了Claude Code。
-
-   ```bash
-   # 通过npm安装ccr
-   npm install -g @musistudio/claude-code-router
-   
-   # 验证是否安装成功
-   ccr -v
-   ```
-     
-   然后创建并配置以下信息至 `~/.claude-code-router/config.json`。
-
-   ```json
-   {
-     "PORT": 3456,
-     "Providers": [
+    **选项 B：OpenAI API 风格**  
+    此方法使用 `claude-code-router` 将 OpenAI兼容的 API (例如 `chat/completions`) 转换为 Claude Code 可用的格式。
+    
+    1. 安装 `claude-code-router`：
+       ```bash
+       npm install -g @musistudio/claude-code-router
+       ```
+    2. 编辑 `~/.claude-code-router/config.json`：
+       ```json
        {
-         "name": "stepfun-api",
-         "api_base_url": "https://api.stepfun.com/v1/chat/completions",
-         "api_key": "从开放平台获取的apikey",
-         "models": ["step-3.5-flash"],
-         "transformer":{
-              "step-3.5-flash": { "use": ["OpenAI"]}
+         "PORT": 3456,
+         "Providers": [
+           {
+             "name": "stepfun-api",
+             "api_base_url": "https://api.stepfun.com/v1/chat/completions",
+             "api_key": "阶跃星辰开放平台_API_KEY",
+             "models": ["step-3.5-flash"],
+             "transformer": {
+               "step-3.5-flash": { "use": ["OpenAI"] }
+             }
+           }
+         ],
+         "Router": {
+           "default": "stepfun-api,step-3.5-flash",
+           "background": "stepfun-api,step-3.5-flash",
+           "think": "stepfun-api,step-3.5-flash",
+           "longContext": "stepfun-api,step-3.5-flash",
+           "webSearch": "stepfun-api,step-3.5-flash"
          }
        }
-     ],
-     "Router": {
-       "default": "stepfun-api,step-3.5-flash",
-       "background": "stepfun-api,step-3.5-flash",
-       "think": "stepfun-api,step-3.5-flash",
-       "longContext": "stepfun-api,step-3.5-flash",
-       "webSearch": "stepfun-api,step-3.5-flash"
-     }
-   }
-   ```
-   配置完成后可以通过下面命令使用：
+       ```
+    3. 启动：
+       ```bash
+       ccr code   # 通过 router 启动 Claude Code
+       ```
 
-   ```bash
-   # 启动Claude
-   ccr code 
-   
-   # 重启ccr，如修改配置需要重启
-   ccr restart 
-   ```
+#### 7.1.3 在 Codex 上使用 Step 3.5 Flash
 
-#### 7.1.4 Step 3.5 Flash 接入 Codex
+1.  **安装 Codex**：
+    ```bash
+    npm install -g @openai/codex
+    ```
 
-1. 安装 Codex。
-   ```bash
-   # 通过npm安装codex
-   npm install -g @openai/codex
-   
-   # 验证是否安装成功
-   codex --version
-   ```
+2.  **配置 Codex**：
+    更新 `~/.codex/config.toml` (保持其他设置不变)：
 
-2. 配置Codex。
-   在Codex 中使用step-3.5-flash，只需配置以下信息到`~/.codex/config.toml`即可，文件原有配置信息不变。
+    ```toml
+    model="step-3.5-flash"
+    model_provider = "stepfun-chat"
+    preferred_auth_method = "apikey"
 
-   ```toml
-   model="step-3.5-flash"
-   model_provider = "stepfun-chat"
-   preferred_auth_method = "apikey"
-   
-   # 配置provider
-   [model_providers.stepfun-chat]
-   name = "OpenAI using response"
-   base_url = "https://api.stepfun.com/v1"
-   env_key = "OPENAI_API_KEY"
-   wire_api = "chat"
-   query_params = {}
-   ```
+    # 配置 provider
+    [model_providers.stepfun-chat]
+    name = "OpenAI using response"
+    base_url = "https://api.stepfun.com/v1"
+    env_key = "OPENAI_API_KEY"
+    wire_api = "chat"
+    query_params = {}
+    ```
+    *注意：`wire_api` 必须设置为 `chat`。*
 
-   注意：在Codex使用时，`wire_api`仅支持chat模式，原有使用responses模式的注意修改。此外需要切换`model_provider`为新配置的`stepfun-chat`。
+    新开一个终端窗口运行 codex。运行 `/status` 检查配置。
 
-   设置成功后可以执行codex 启动并通过`/status`命令查看配置情况。
-
-   ```bash
-   /status
-   📂 Workspace
-     • Path: /Users/step-test/
-     • Approval Mode: on-request
-     • Sandbox: workspace-write
-     • AGENTS files: (none)
-   
-   🧠 Model
-     • Name: step-3.5-flash
-     • Provider: Stepfun-chat
-   
-   💻 Client
-     • CLI Version: 0.40.0
-   ```
-
-### 7.2 Step-DeepResearch（DeepResearch）框架接入
-
-参考环境配置，直接将`MODEL_NAME`换成`Step-3.5-Flash`即可。[https://github.com/stepfun-ai/StepDeepResearch?tab=readme-ov-file#1-environment-setup](https://github.com/stepfun-ai/StepDeepResearch?tab=readme-ov-file#1-environment-setup)
-
+#### 7.1.4 在 Step-DeepResearch 上使用 Step 3.5 Flash
+1. 参考以下链接的环境设置，并将 `MODEL_NAME` 配置为 `Step-3.5-Flash`。[https://github.com/stepfun-ai/StepDeepResearch?tab=readme-ov-file#1-environment-setup](https://github.com/stepfun-ai/StepDeepResearch?tab=readme-ov-file#1-environment-setup)
 
 ## 8. 已知问题与未来方向
 
