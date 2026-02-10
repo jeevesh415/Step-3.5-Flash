@@ -69,7 +69,7 @@ You can configure the model via the **WebUI** (Recommended) or by editing the **
     *   Click **ADD Entry**.
     *   **Name:** `stepfun` (or `custom-1`).
     *   **API Type:** `openai-completions`.
-    *   **Base URL:** `https://api.stepfun.com/v1` (or your proxy URL).
+    *   **Base URL:** `https://api.stepfun.ai/v1` (or your proxy URL).
     *   **API Key:** Enter your StepFun API Key.
     ![Add Provider](assets/(null)-20260205105937478.(null))
 
@@ -98,7 +98,7 @@ Edit `~/.openclaw/openclaw.json` directly.
   "models": {
     "providers": {
       "stepfun": {
-        "baseUrl": "https://api.stepfun.com/v1",
+        "baseUrl": "https://api.stepfun.ai/v1",
         "apiKey": "YOUR_SK_KEY_HERE",
         "auth": "api-key",
         "api": "openai-completions",
@@ -160,7 +160,7 @@ from openai import OpenAI
 # Configuration
 MODEL = "step-3.5-flash" 
 API_KEY = "YOUR_API_KEY"      
-BASE_URL = "https://api.stepfun.com/v1"
+BASE_URL = "https://api.stepfun.ai/v1"
 
 client = OpenAI(api_key=API_KEY, base_url=BASE_URL)
 
