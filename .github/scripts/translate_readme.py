@@ -4,6 +4,7 @@ Script to translate README.md to Chinese using Step AI's translation API.
 """
 import os
 import sys
+import textwrap
 from openai import OpenAI
 
 
@@ -19,15 +20,16 @@ def main():
         base_url='https://api.stepfun.com/v1'
     )
     
-    with open('README.md', 'r') as f:
+    with open('README.md', 'r', encoding='utf-8') as f:
         content = f.read()
         
-    system_prompt = """You are a professional technical translator. 
-    Translate the following Markdown content from English to Chinese (Simplified). 
-    Maintain all formatting, links, and code blocks exactly as they are. 
-    Only translate the text content.
-    The file is a README for an AI model named 'Step 3.5 Flash'.
-    """
+    system_prompt = textwrap.dedent("""
+        You are a professional technical translator. 
+        Translate the following Markdown content from English to Chinese (Simplified). 
+        Maintain all formatting, links, and code blocks exactly as they are. 
+        Only translate the text content.
+        The file is a README for an AI model named 'Step 3.5 Flash'.
+    """).strip()
 
     response = client.chat.completions.create(
         model='step-3.5-flash',
@@ -39,7 +41,7 @@ def main():
     
     translated_content = response.choices[0].message.content
     
-    with open('README.zh-CN.md', 'w') as f:
+    with open('README.zh-CN.md', 'w', encoding='utf-8') as f:
         f.write(translated_content)
     
     print('README.md successfully translated to README.zh-CN.md')
