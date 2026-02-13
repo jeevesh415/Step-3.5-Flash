@@ -380,7 +380,7 @@ cmake --build build-vulkan -j8
 ```bash
 ./llama-cli -m step3.5_flash_Q4_K_S.gguf -c 16384 -b 2048 -ub 2048 -fa on --temp 1.0 -p "What's your name?"
 ```
-6. Test performance with llama-batched-bench:
+6. Test performance with llama-batched-bench ([Benchmark details](llama.cpp/docs/step3.5-flash.md))
 ```bash
 ./llama-batched-bench -m step3.5_flash_Q4_K_S.gguf -c 32768 -b 2048 -ub 2048 -npp 0,2048,8192,16384,32768 -ntg 128 -npl 1
 ```
