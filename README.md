@@ -211,12 +211,19 @@ pip install -U vllm --pre \
   --index-url https://pypi.org/simple \
   --extra-index-url https://wheels.vllm.ai/nightly
 ```
-2. Launch the server.
-
-**Note**: Full MTP3 support is not yet available in vLLM. We are actively working on a Pull Request to integrate this feature, which is expected to significantly enhance decoding performance.
 
 **Note**: Bug fixes for tool parser and reasoning parser, as well as support for the `v1/messages` interface, are being merged into vLLM. In the meantime, you can use the `vllm/vllm-openai:v0.15.1-x86_64` image with `step3.5_vllm_v0.15.1.patch` for deployment.
+```bash 
+# via Docker
+# refer to "step3.5_vllm_v0.15.1.Dockerfile"
 
+# or via pip 
+pip install -U vllm==0.15.1
+cd /path/to/lib/python3.12/site-packages # replace with your installation path
+git apply step3.5_vllm_v0.15.1.patch
+```
+
+2. Launch the server.
   - For fp8 model
 ```bash  
 vllm serve <MODEL_PATH_OR_HF_ID> \
