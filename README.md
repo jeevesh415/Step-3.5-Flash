@@ -213,15 +213,15 @@ pip install -U vllm --pre \
 ```
 
 **Note**: Bug fixes for tool parser and reasoning parser, as well as support for the `v1/messages` interface, are being merged into vLLM. In the meantime, you can use the `vllm/vllm-openai:v0.15.1-x86_64` image with `step3.5_vllm_v0.15.1.patch` for deployment.
+**Note**: Bug fixes for tool parser and reasoning parser, as well as support for the `v1/messages` interface, are being merged into vLLM. In the meantime, you can use the `vllm/vllm-openai:v0.15.1-x86_64` image with `step3.5_vllm_v0.15.1.patch` for deployment. The patch file `step3.5_vllm_v0.15.1.patch` is provided in this repository; download or copy it and ensure it is accessible from the directory where you run `git apply` (or use its absolute path).
 ```bash 
 # via Docker
-# build the Docker image using the provided Dockerfile
-docker build -t vllm-step3p5:v0.15.1 -f step3.5_vllm_v0.15.1.Dockerfile .
+# refer to "step3.5_vllm_v0.15.1.Dockerfile"
 
 # or via pip 
 pip install -U vllm==0.15.1
-cd /path/to/lib/python3.12/site-packages # Replace with the parent dir of vLLM installation path.
-git apply step3.5_vllm_v0.15.1.patch
+cd /path/to/lib/python3.12/site-packages  # Replace with the parent dir of vLLM installation path.
+git apply /path/to/step3.5_vllm_v0.15.1.patch  # Replace with the actual path to the patch file (e.g., from the repository root).
 ```
 
 2. Launch the server.
