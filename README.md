@@ -415,7 +415,7 @@ You can configure [Claude Code](https://docs.anthropic.com/en/docs/agents-and-to
 {
   "env": {
     "ANTHROPIC_API_KEY": "YOUR_STEPFUN_API_KEY",
-    "ANTHROPIC_BASE_URL": "https://api.stepfun.ai/"
+    "ANTHROPIC_BASE_URL": "https://api.stepfun.ai/"  // Use "https://api.stepfun.com/" for China endpoint
   },
   "model": "step-3.5-flash"
 }
