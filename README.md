@@ -215,7 +215,8 @@ pip install -U vllm --pre \
 **Note**: Bug fixes for tool parser and reasoning parser, as well as support for the `v1/messages` interface, are being merged into vLLM. In the meantime, you can use the `vllm/vllm-openai:v0.15.1-x86_64` image with `step3.5_vllm_v0.15.1.patch` for deployment.
 ```bash 
 # via Docker
-# refer to "step3.5_vllm_v0.15.1.Dockerfile"
+# build the Docker image using the provided Dockerfile
+docker build -t vllm-step3p5:v0.15.1 -f step3.5_vllm_v0.15.1.Dockerfile .
 
 # or via pip 
 pip install -U vllm==0.15.1
