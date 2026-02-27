@@ -409,7 +409,7 @@ cd llama.cpp
 {
   "env": {
     "ANTHROPIC_API_KEY": "YOUR_STEPFUN_API_KEY",
-    "ANTHROPIC_BASE_URL": "https://api.stepfun.ai/"
+    "ANTHROPIC_BASE_URL": "https://api.stepfun.ai/" //中国国内接口请使用"https://api.stepfun.com/"
   },
   "model": "step-3.5-flash"
 }
