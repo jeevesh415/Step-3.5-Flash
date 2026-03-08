@@ -211,7 +211,6 @@ pip install -U vllm --pre \
   --extra-index-url https://wheels.vllm.ai/nightly
 ```
 
-**Note**: Bug fixes for tool parser and reasoning parser, as well as support for the `v1/messages` interface, are being merged into vLLM. In the meantime, you can use the `vllm/vllm-openai:v0.15.1-x86_64` image with `step3.5_vllm_v0.15.1.patch` for deployment.
 **Note**: Bug fixes for tool parser and reasoning parser, as well as support for the `v1/messages` interface, are being merged into vLLM. In the meantime, you can use the `vllm/vllm-openai:v0.15.1-x86_64` image with `step3.5_vllm_v0.15.1.patch` for deployment. The patch file `step3.5_vllm_v0.15.1.patch` is provided in this repository; download or copy it and ensure it is accessible from the directory where you run `git apply` (or use its absolute path).
 ```bash 
 # via Docker
