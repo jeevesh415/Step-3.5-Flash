@@ -486,3 +486,13 @@ As we work to shape the future of AGI by expanding broad model capabilities, we 
 
 ## License
 This project is open-sourced under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0).
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=stepfun-ai%2FStep-3.5-Flash&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=stepfun-ai/Step-3.5-Flash&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=stepfun-ai/Step-3.5-Flash&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=stepfun-ai/Step-3.5-Flash&type=date&legend=top-left" />
+ </picture>
+</a>
